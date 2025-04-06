@@ -1,0 +1,65 @@
+﻿<Window x:Class="MemoryGame.View.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MemoryGame.ViewModel"
+        xmlns:conv="clr-namespace:MemoryGame.Service"
+        Title="Options" Height="300" Width="400"
+        WindowStartupLocation="CenterScreen">
+    <Window.Background>
+        <RadialGradientBrush>
+            <GradientStop Color="#FF102C46" Offset="0"/>
+            <GradientStop Color="#FF174365" Offset="1"/>
+        </RadialGradientBrush>
+    </Window.Background>
+    <Window.Resources>
+        <!-- Instanțe pentru convertoare -->
+        <conv:EnumToBooleanConverter x:Key="EnumBooleanConverter"/>
+        <conv:CustomVisibilityConverter x:Key="CustomVisibilityConverter"/>
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF5A5A"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        CornerRadius="25"
+                        Padding="10">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <StackPanel Margin="10">
+        <TextBlock Text="Selectează tipul de tablă:" FontWeight="Bold" Margin="0,0,0,10" Foreground="White"/>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <RadioButton Content="Standard (4x4)" 
+                         IsChecked="{Binding SelectedBoardType, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Standard}" 
+                         Margin="0,0,20,0" Foreground="White"/>
+            <RadioButton Content="Custom" 
+                         IsChecked="{Binding SelectedBoardType, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Custom}" Foreground="White"/>
+        </StackPanel>
+        <!-- Secțiunea pentru introducerea valorilor custom -->
+        <StackPanel Margin="10" Visibility="{Binding SelectedBoardType, Converter={StaticResource CustomVisibilityConverter}}">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Rows:" Width="50" Foreground="White"/>
+                <TextBox Text="{Binding Rows, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Columns:" Width="50" Foreground="White"/>
+                <TextBox Text="{Binding Columns, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
+            </StackPanel>
+        </StackPanel>
+        <Button Content="Save Options" 
+                Style="{StaticResource RoundedButtonStyle}"
+                Command="{Binding SaveOptionsCommand}" 
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" 
+                Width="150" Height="40" HorizontalAlignment="Center" Margin="10"/>
+    </StackPanel>
+</Window>

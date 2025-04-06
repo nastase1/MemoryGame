@@ -1,0 +1,113 @@
+﻿<Window x:Class="MemoryGame.View.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MemoryGame.ViewModel"
+        Title="Login Window" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Window.Background>
+        <RadialGradientBrush>
+            <GradientStop Color="#FF102C46" Offset="0"/>
+            <GradientStop Color="#FF174365" Offset="1"/>
+        </RadialGradientBrush>
+    </Window.Background>
+    <Window.Resources>
+        <!-- ViewModel instanțiat din resurse -->
+        <local:Login x:Key="loginVM" />
+        <!-- Stilul butoanelor, similar cu cel din MainWindow -->
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF5A5A"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <!-- Seagă DataContext-ul din resurse -->
+    <Grid Margin="10" DataContext="{StaticResource loginVM}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Titlul -->
+        <TextBlock Text="Welcome! Enjoy this game!"
+                   FontSize="22" 
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,10"
+                   Foreground="White"/>
+
+        <!-- Zona centrală: ListBox-ul de utilizatori și imaginea utilizatorului selectat -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Coloana stângă: ListBox-ul și butoanele pentru gestionarea utilizatorilor -->
+            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                <TextBlock Text="Alege un utilizator:" 
+                           FontWeight="Bold" 
+                           Margin="0,0,0,5" 
+                           Foreground="White"/>
+                <ListBox Name="UserListBox" Height="250" Margin="0,0,0,10"
+                         ItemsSource="{Binding Users}"
+                         SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <!-- Afișăm doar numele în ListBox -->
+                                <TextBlock Text="{Binding FirstName}" />
+                                <TextBlock Text=" " />
+                                <TextBlock Text="{Binding LastName}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <!-- Butoanele New User și Delete User, afișate orizontal -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Content="New User"
+                            Margin="20,0,20,0"
+                            Width="120"
+                            Height="40"
+                            Style="{StaticResource RoundedButtonStyle}"
+                            Command="{Binding NewUserCommand}"/>
+                    <Button Content="Delete User"
+                            Margin="0,0,20,0"
+                            Width="120"
+                            Style="{StaticResource RoundedButtonStyle}"
+                            Command="{Binding DeleteUserCommand}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Coloana dreaptă: Imaginea utilizatorului selectat -->
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Image Stretch="Uniform"
+                       Source="{Binding SelectedUser.ProfileImage}" Grid.Column="1" Margin="13,8,2,157" />
+        </Grid>
+
+        <!-- Zona de jos: Butoane de Play și Cancel -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+            <Button Content="Play" Width="150" Height="50" 
+                    Style="{StaticResource RoundedButtonStyle}" 
+                    Margin="0,0,10,0"
+                    Command="{Binding StartGameCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+            <Button Content="Exit" Width="150" Height="50" 
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Command="{Binding ExitCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

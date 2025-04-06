@@ -1,0 +1,65 @@
+﻿<Window x:Class="MemoryGame.View.CategoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:conv="clr-namespace:MemoryGame.Service"
+        Title="Select Category" Height="300" Width="300"
+        WindowStartupLocation="CenterOwner">
+    <Window.Background>
+        <RadialGradientBrush>
+            <GradientStop Color="#FF102C46" Offset="0"/>
+            <GradientStop Color="#FF174365" Offset="1"/>
+        </RadialGradientBrush>
+    </Window.Background>
+    <Window.Resources>
+        <conv:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+        <!-- Stil simplu pentru butoane similar cu cel din meniu -->
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF5A5A"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="25"
+                                Padding="10">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Select a Category" 
+                   FontSize="20" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Margin="0,0,0,10" />
+
+        <StackPanel Grid.Row="1" Margin="10">
+            <RadioButton Content="Cars" GroupName="CategoryGroup" 
+                         IsChecked="{Binding SelectedCategory, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Cars}" Foreground="White" />
+            <RadioButton Content="Buildings" GroupName="CategoryGroup" 
+                         IsChecked="{Binding SelectedCategory, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Buildings}" Foreground="White" />
+            <RadioButton Content="Animals" GroupName="CategoryGroup" 
+                         IsChecked="{Binding SelectedCategory, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Animals}" Foreground="White" />
+        </StackPanel>
+
+        <Button Grid.Row="2" Content="Save" Width="100" 
+                HorizontalAlignment="Center" 
+                Style="{StaticResource RoundedButtonStyle}"
+                Command="{Binding SaveCategoryCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+    </Grid>
+</Window>
