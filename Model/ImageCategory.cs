@@ -8,8 +8,8 @@ namespace MemoryGame.Model
 {
     public enum ImageCategory
     {
-        Cars,
-        Buildings,
-        Animals,
+        Cars=0,
+        Buildings=1,
+        Animals=2
     }
 }

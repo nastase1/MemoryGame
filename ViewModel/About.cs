@@ -63,8 +63,8 @@ namespace MemoryGame.ViewModel
         {
             StudentName = "Năstase Teodor";
             Email = "teodor-a.nastase@student.unitbv.ro";
-            GroupNumber = "Grupa: 10LF233";
-            Specialization = "Specializarea: Informatică";
+            GroupNumber = "Group: 10LF233";
+            Specialization = "Specialization: Informatică";
             OpenEmailCommand = new RelayCommand(OpenEmail);
             CloseWindowCommand = new RelayCommand(CloseAboutWindow);
         }

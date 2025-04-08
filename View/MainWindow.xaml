@@ -8,7 +8,7 @@
         Title="Memory Game" Height="600" Width="800"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <Image Source="C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\Images\memory_backround.jpg" Stretch="UniformToFill" Opacity="1"/>
+        <Image Source="\Images\memory_backround.jpg" Stretch="UniformToFill" Opacity="1"/>
 
         <Grid>
             <Grid.RowDefinitions>

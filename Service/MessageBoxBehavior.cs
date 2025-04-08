@@ -1,10 +1,12 @@
-﻿using MemoryGame.View;
+﻿using MemoryGame.Model;
+using MemoryGame.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using MemoryGame.ViewModel;
 
 namespace MemoryGame.Service
 {
@@ -29,24 +31,37 @@ namespace MemoryGame.Service
 
         private static void OnGameOverMessageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine($"OnGameOverMessageChanged: {e.NewValue}");
+
             if (d is Window window && e.NewValue is string message && !string.IsNullOrWhiteSpace(message))
             {
-                // Afișăm mesajul
+                System.Diagnostics.Debug.WriteLine($"Showing message box: {message}");
                 MessageBox.Show(message, "Game Over", MessageBoxButton.OK, MessageBoxImage.Information);
-                // Închidem fereastra
+
+                System.Diagnostics.Debug.WriteLine("Closing window");
                 window.Close();
 
+                // Verificăm dacă există deja o fereastră de meniu stocată
                 if (Application.Current.Properties["MenuWindow"] is Window menuWindow)
                 {
-                    menuWindow.Show();
+                    System.Diagnostics.Debug.WriteLine("Showing stored menu window");
+                    if (!menuWindow.IsVisible)
+                        menuWindow.Show();
                 }
                 else
                 {
-                    // Dacă nu avem referința, creăm totuși un nou MenuWindow (ca backup)
-                    var newMenuWindow = new MenuWindow();
+                    System.Diagnostics.Debug.WriteLine("Creating new menu window");
+                    // Recuperăm utilizatorul curent pentru a seta DataContext-ul meniului
+                    var currentUser = Application.Current.Properties["CurrentUser"] as User;
+                    var newMenuWindow = new MenuWindow
+                    {
+                        DataContext = new Menu(currentUser)
+                    };
+                    Application.Current.Properties["MenuWindow"] = newMenuWindow;
                     newMenuWindow.Show();
                 }
             }
         }
+
     }
 }

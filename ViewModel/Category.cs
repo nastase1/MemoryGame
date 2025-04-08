@@ -44,6 +44,7 @@ namespace MemoryGame.ViewModel
             _user.Category = SelectedCategory;
             SaveUserToJson(_user);
 
+            Application.Current.Properties["CurrentUser"] = _user;
             CategorySaved?.Invoke(SelectedCategory);
 
             if (parameter is Window window)

@@ -70,16 +70,19 @@
             <Button Content="New Game" Width="200" Style="{StaticResource RoundedButtonStyle}"
                     Command="{Binding NewGameCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <Button Content="Open Game" Width="200" Style="{StaticResource RoundedButtonStyle}"/>
-            <Button Content="Save Game" Width="200" Style="{StaticResource RoundedButtonStyle}"/>
-            <Button Content="Statistics" Width="200" Style="{StaticResource RoundedButtonStyle}"/>
+            <Button Content="Open Game" Width="200" Style="{StaticResource RoundedButtonStyle}"
+                    Command="{Binding OpenGameCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Content="Statistics" Width="200" Style="{StaticResource RoundedButtonStyle}"
+                    Command="{Binding StatisticsCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             <Button Content="Options" Width="200" Style="{StaticResource RoundedButtonStyle}"
                     Command="{Binding OpenOptionsCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             <Button Content="About" Width="200" Style="{StaticResource RoundedButtonStyle}"
                     Command="{Binding OpenAboutCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <Button Content="Exit" Width="200" Style="{StaticResource RoundedButtonStyle}"
+            <Button Content="Back" Width="200" Style="{StaticResource RoundedButtonStyle}"
                     Command="{Binding ExitCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
         </StackPanel>

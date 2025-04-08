@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
+using System.Windows.Media;
 
 namespace MemoryGame.Model
 {
     public class Card : INotifyPropertyChanged
     {
         public int Id { get; set; }
+
         public string ImagePath { get; set; }
+
+        [JsonIgnore]
+        public ImageSource Image { get; set; }
+
         private bool _isFlipped;
         public bool IsFlipped
         {

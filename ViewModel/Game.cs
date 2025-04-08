@@ -1,11 +1,15 @@
 ﻿using MemoryGame.Model;
 using MemoryGame.Service;
+using MemoryGame.View;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace MemoryGame.ViewModel
@@ -15,22 +19,22 @@ namespace MemoryGame.ViewModel
         public ObservableCollection<Card> Cards { get; set; } = new ObservableCollection<Card>();
 
         public event Action<bool> GameOver;
-        private void EndGame(bool isWin)
+        public async Task EndGame(bool isWin)
         {
+            System.Diagnostics.Debug.WriteLine($"EndGame called with isWin: {isWin}");
             if (_gameTimer != null)
             {
                 _gameTimer.Stop();
-                _gameTimer.Tick -= GameTimer_Tick; // Dezabonăm evenimentul
+                _gameTimer.Tick -= GameTimer_Tick;
                 _gameTimer = null;
             }
-            // Setăm mesajul în funcție de rezultat
-            GameOverMessage = isWin ? "Ai câștigat!" : "Timpul a expirat! Ai pierdut!";
+            GameOverMessage = isWin ? "You've won" : "The time has expired: you lost!";
             OnPropertyChanged(nameof(GameOverMessage));
-
             GameOver?.Invoke(isWin);
+
+            await UpdatePlayerStatisticsAsync(isWin);
         }
 
-        // Adăugăm proprietatea GameOverMessage
         private string _gameOverMessage;
         public string GameOverMessage
         {
@@ -40,6 +44,13 @@ namespace MemoryGame.ViewModel
                 _gameOverMessage = value;
                 OnPropertyChanged(nameof(GameOverMessage));
             }
+        }
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set { _isLoading = value; OnPropertyChanged(nameof(IsLoading)); }
         }
 
         public int BoardRows { get; set; }
@@ -55,33 +66,56 @@ namespace MemoryGame.ViewModel
             set { _remainingTime = value; OnPropertyChanged(nameof(RemainingTime)); }
         }
 
-        private Card _firstSelectedCard;
-        private Card _secondSelectedCard;
+        public Card _firstSelectedCard;
+        public Card _secondSelectedCard;
 
         public ICommand CardSelectedCommand { get; }
+        public ICommand ExitGameCommand { get; }
+        public ICommand SaveGameCommand { get; }
 
-        public Game(User user)
+        private User _user;
+
+        public Game(User user, bool isLoadedGame = false)
         {
+            _user = user;
+            // Stocăm utilizatorul curent pentru navigare ulterioară
+            Application.Current.Properties["CurrentUser"] = user;
+
             try
             {
                 BoardRows = user.BoardRows;
                 BoardColumns = user.BoardColumns;
-                InitializeCards(user.Category, user.BoardRows, user.BoardColumns);
+                if(!isLoadedGame)
+                    InitializeCardsAsync(user.Category, user.BoardRows, user.BoardColumns);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Eroare la inițializarea cardurilor: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("Error initializing cards: " + ex.Message);
                 throw;
             }
 
-            // Exemplu: setăm un timp de joc (în minute) - poți să-l iei tot din user sau opțiuni
-            RemainingTime = TimeSpan.FromMinutes(3);
+            // Setăm timpul de joc (aici 3 minute; poate fi modificat ulterior)
+            if(!isLoadedGame)
+                RemainingTime = TimeSpan.FromMinutes(3);
 
             _gameTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _gameTimer.Tick += GameTimer_Tick;
-            _gameTimer.Start();
 
             CardSelectedCommand = new RelayCommand(CardSelected);
+            ExitGameCommand = new RelayCommand(ExitGame);
+            SaveGameCommand = new RelayCommand(async (param) => await SaveGame(param));
+            
+
+            // Nu pornește timerul până când nu s-au încărcat cărțile
+            // Timerul se va porni după InitializeCardsAsync
+        }
+
+        public void StartTimer()
+        {
+            if (_gameTimer != null && !_gameTimer.IsEnabled)
+            {
+                _gameTimer.Start();
+            }
         }
 
         private void GameTimer_Tick(object sender, EventArgs e)
@@ -93,7 +127,6 @@ namespace MemoryGame.ViewModel
             else
             {
                 _gameTimer.Stop();
-                // Dacă sunt cărți neîntâlnite, jocul se termină
                 if (Cards.Any(c => !c.IsMatched))
                 {
                     EndGame(false);
@@ -101,42 +134,44 @@ namespace MemoryGame.ViewModel
             }
         }
 
-        private void InitializeCards(ImageCategory category, int rows, int columns)
+        private async void InitializeCardsAsync(ImageCategory category, int rows, int columns)
         {
-            int totalCards = rows * columns;
-            System.Diagnostics.Debug.WriteLine($"Total cards: {totalCards}");
-            int pairsNeeded = totalCards / 2;
-
-            // Construim calea spre folderul categoriei: ex. "Images/Animals"
-            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            string categoryPath = Path.Combine(baseDir, "Images", category.ToString());
-            System.Diagnostics.Debug.WriteLine($"Calea căutată: {categoryPath}");
-            if (!Directory.Exists(categoryPath))
-                throw new DirectoryNotFoundException($"Folderul '{categoryPath}' nu a fost găsit.");
-
-            var allImages = Directory.GetFiles(categoryPath, "*.jpg")
-                .Concat(Directory.GetFiles(categoryPath, "*.png"))
-                .ToArray();
-            System.Diagnostics.Debug.WriteLine($"Număr imagini găsite: {allImages.Length}");
-            if (allImages.Length < pairsNeeded)
-                throw new Exception($"Nu sunt suficiente imagini în folderul {categoryPath}. Sunt necesare cel puțin {pairsNeeded} imagini, dar au fost găsite {allImages.Length}.");
-
-            var selectedImages = allImages
-                .OrderBy(_ => _random.Next())
-                .Take(pairsNeeded)
-                .ToList();
-
-            var cardList = selectedImages.SelectMany(image => new[] {
-                new Card { ImagePath = image, IsFlipped = false, IsMatched = false },
-                new Card { ImagePath = image, IsFlipped = false, IsMatched = false }
-            }).ToList();
-
-            cardList = cardList.OrderBy(_ => _random.Next()).ToList();
-
-            foreach (var card in cardList)
+            IsLoading = true;
+            await Task.Run(() =>
             {
-                Cards.Add(card);
-            }
+                int totalCards = rows * columns;
+                int pairsNeeded = totalCards / 2;
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string categoryPath = Path.Combine(baseDir, "Images", category.ToString());
+                var allImages = Directory.GetFiles(categoryPath, "*.jpg")
+                    .Concat(Directory.GetFiles(categoryPath, "*.png"))
+                    .ToArray();
+                var selectedImages = allImages.OrderBy(_ => _random.Next()).Take(pairsNeeded).ToList();
+                var cardList = selectedImages.SelectMany(imagePath =>
+                {
+                    var image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(imagePath, UriKind.Absolute);
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.EndInit();
+                    image.Freeze();
+                    return new[]
+                    {
+                        new Card { ImagePath = imagePath, Image = image, IsFlipped = false, IsMatched = false },
+                        new Card { ImagePath = imagePath, Image = image, IsFlipped = false, IsMatched = false }
+                    };
+                }).ToList();
+                cardList = cardList.OrderBy(_ => _random.Next()).ToList();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    foreach (var card in cardList)
+                    {
+                        Cards.Add(card);
+                    }
+                });
+            });
+            IsLoading = false;
+            _gameTimer.Start();
         }
 
         private async void CardSelected(object parameter)
@@ -153,17 +188,17 @@ namespace MemoryGame.ViewModel
             else if (_secondSelectedCard == null)
             {
                 _secondSelectedCard = selectedCard;
-                _isBusy = true; // Blocăm interacțiunea pe parcursul comparării
+                _isBusy = true;
 
                 if (_firstSelectedCard.ImagePath == _secondSelectedCard.ImagePath)
                 {
-                    await System.Threading.Tasks.Task.Delay(300);
+                    await Task.Delay(300);
                     _firstSelectedCard.IsMatched = true;
                     _secondSelectedCard.IsMatched = true;
                 }
                 else
                 {
-                    await System.Threading.Tasks.Task.Delay(700);
+                    await Task.Delay(700);
                     _firstSelectedCard.IsFlipped = false;
                     _secondSelectedCard.IsFlipped = false;
                 }
@@ -178,6 +213,85 @@ namespace MemoryGame.ViewModel
                 }
             }
         }
+
+        // Metodă pentru salvarea jocului curent
+        public async Task SaveCurrentGameAsync(TimeSpan elapsedTime)
+        {
+            var gameSave = new GameSave
+            {
+                UserId = _user.Id,
+                FirstName = _user.FirstName,
+                LastName = _user.LastName,
+                BoardRows = BoardRows,
+                BoardColumns = BoardColumns,
+                Category = _user.Category,
+                RemainingTime = this.RemainingTime,
+                ElapsedTime = elapsedTime,
+                Cards = this.Cards.ToList()
+            };
+
+            await GameSaveService.SaveGameAsync(gameSave);
+        }
+
+        // Comanda pentru Exit: închide fereastra de joc și redeschide fereastra de meniu
+        private void ExitGame(object parameter)
+        {
+            if (parameter is Window gameWindow)
+            {
+                // Recuperează fereastra de meniu stocată
+                var menuWindow = Application.Current.Properties["MenuWindow"] as Window;
+                if (menuWindow == null)
+                {
+                    menuWindow = new MenuWindow
+                    {
+                        DataContext = new Menu(_user)
+                    };
+                    Application.Current.Properties["MenuWindow"] = menuWindow;
+                }
+                _gameTimer.Stop();
+                menuWindow.Show();
+                gameWindow.Close();
+            }
+        }
+
+
+        // Comanda pentru Save: salvează jocul și apoi comportă-se ca Exit
+        private async Task SaveGame(object parameter)
+        {
+            try
+            {
+                // Folosim TimeSpan.Zero ca exemplu; poți calcula timpul scurs dacă dorești.
+                await SaveCurrentGameAsync(TimeSpan.Zero);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saving game: " + ex.Message, "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            await Task.Delay(100);
+            ExitGame(parameter);
+        }
+
+        private async Task UpdatePlayerStatisticsAsync(bool isWin)
+        {
+            var stats = await StatisticsService.LoadStatisticsAsync();
+            var currentStats = stats.FirstOrDefault(s => s.UserId == _user.Id);
+            if (currentStats == null)
+            {
+                currentStats = new PlayerStatistics
+                {
+                    UserId = _user.Id,
+                    UserName = _user.FirstName + " " + _user.LastName,
+                    GamesPlayed = 0,
+                    GamesWon = 0
+                };
+            }
+            currentStats.GamesPlayed++;
+            if (isWin)
+                currentStats.GamesWon++;
+            await StatisticsService.UpdateStatisticsAsync(currentStats);
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>

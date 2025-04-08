@@ -26,7 +26,7 @@ namespace MemoryGame.ViewModel
 
         public TimeSetting()
         {
-            TimeInput = "";
+            TimeInput = "3:00";
             OkCommand = new RelayCommand(Ok);
         }
 
@@ -41,8 +41,8 @@ namespace MemoryGame.ViewModel
             }
             else
             {
-                MessageBox.Show("Introduceți un timp valid în formatul m:ss (de exemplu, 2:50).",
-                                "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("The time format should be m:ss (for example, 2:50).",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

@@ -1,0 +1,36 @@
+{
+  "UserId": 1,
+  "FirstName": "Nastase",
+  "LastName": "Teodor",
+  "BoardRows": 2,
+  "BoardColumns": 2,
+  "Category": 1,
+  "RemainingTime": "00:02:59",
+  "ElapsedTime": "00:00:00",
+  "Cards": [
+    {
+      "Id": 0,
+      "ImagePath": "C:\\Facultate\\An 2\\Semestrul 2\\MAP\\MemoryGame\\MemoryGame\\bin\\Debug\\net8.0-windows\\Images\\Buildings\\pexels-chevanon-1108099.jpg",
+      "IsFlipped": false,
+      "IsMatched": false
+    },
+    {
+      "Id": 0,
+      "ImagePath": "C:\\Facultate\\An 2\\Semestrul 2\\MAP\\MemoryGame\\MemoryGame\\bin\\Debug\\net8.0-windows\\Images\\Buildings\\pexels-chevanon-1108099.jpg",
+      "IsFlipped": true,
+      "IsMatched": false
+    },
+    {
+      "Id": 0,
+      "ImagePath": "C:\\Facultate\\An 2\\Semestrul 2\\MAP\\MemoryGame\\MemoryGame\\bin\\Debug\\net8.0-windows\\Images\\Buildings\\pexels-pixabay-67552.jpg",
+      "IsFlipped": false,
+      "IsMatched": false
+    },
+    {
+      "Id": 0,
+      "ImagePath": "C:\\Facultate\\An 2\\Semestrul 2\\MAP\\MemoryGame\\MemoryGame\\bin\\Debug\\net8.0-windows\\Images\\Buildings\\pexels-pixabay-67552.jpg",
+      "IsFlipped": false,
+      "IsMatched": false
+    }
+  ]
+}

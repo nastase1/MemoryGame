@@ -69,14 +69,36 @@ namespace MemoryGame.ViewModel
             newUserWindow.ShowDialog();
         }
 
-        private void DeleteUser(object parameter)
+        private async void DeleteUser(object parameter)
         {
             if (SelectedUser != null)
             {
+                // Construiește calea completă către fișierul de salvare
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string saveFolder = Path.Combine(baseDir, "Saves");
+                string gameFileName = Path.Combine(saveFolder, $"GameSave_{SelectedUser.Id}.json");
+
+                if (File.Exists(gameFileName))
+                {
+                    try
+                    {
+                        File.Delete(gameFileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Eroare la ștergerea jocului salvat: " + ex.Message);
+                    }
+                }
+
+                await StatisticsService.RemoveStatisticsAsync(SelectedUser.Id);
+
+                // Șterge utilizatorul și salvează modificările
                 Users.Remove(SelectedUser);
                 SaveUsers();
             }
         }
+
+
         private bool CanDeleteUser(object parameter)
         {
             return SelectedUser != null;
@@ -84,6 +106,11 @@ namespace MemoryGame.ViewModel
 
         private void StartGame(object parameter)
         {
+            if (parameter is Window loginWindow)
+            {
+                Application.Current.Properties["LoginWindow"] = loginWindow;
+            }
+
             if (SelectedUser != null)
             {
                 var menuWindow = new MenuWindow()
@@ -96,7 +123,7 @@ namespace MemoryGame.ViewModel
             
             if(parameter is Window window)
             {
-                window.Close();
+                window.Hide();
             }
         }
         private bool CanStartGame(object parameter)
@@ -129,7 +156,7 @@ namespace MemoryGame.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Eroare la încărcarea utilizatorilor: " + ex.Message);
+                MessageBox.Show("Error to load the users: " + ex.Message);
             }
         }
 

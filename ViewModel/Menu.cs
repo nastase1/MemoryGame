@@ -9,6 +9,8 @@ using System.ComponentModel;
 using MemoryGame.View;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using MemoryGame.Service;
 
 namespace MemoryGame.ViewModel
 {
@@ -20,6 +22,8 @@ namespace MemoryGame.ViewModel
         public ICommand OpenOptionsCommand { get; }
         public ICommand OpenAboutCommand { get; }
         public ICommand ExitCommand { get; }
+        public ICommand OpenGameCommand { get; }
+        public ICommand StatisticsCommand { get; }
 
         public Menu()
         {
@@ -33,6 +37,8 @@ namespace MemoryGame.ViewModel
             OpenOptionsCommand = new RelayCommand(OpenOptionsWindow);
             OpenAboutCommand = new RelayCommand(OpenAboutWindow);
             NewGameCommand = new RelayCommand(OpenNewGameWindow);
+            OpenGameCommand = new RelayCommand(OpenGame);
+            StatisticsCommand = new RelayCommand(OpenStatisticsWindow);
         }
         public string FirstName => _user.FirstName;
         public string LastName => _user.LastName;
@@ -104,7 +110,107 @@ namespace MemoryGame.ViewModel
             }
         }
 
+        private async void OpenGame(object parameter)
+        {
+            if (parameter is Window menuWindow)
+            {
+                // Salvează și ascunde fereastra de meniu
+                Application.Current.Properties["MenuWindow"] = menuWindow;
+                menuWindow.Hide();
+            }
 
+            var savedGame = await GameSaveService.LoadGameAsync(_user.Id);
+            if (savedGame == null)
+            {
+                MessageBox.Show("No saved game found for this user.", "Open Game", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (parameter is Window menuWindow2)
+                    menuWindow2.Show();
+                return;
+            }
+
+            // Construiește view model-ul de joc din salvare
+            var game = new Game(_user, true)
+            {
+                RemainingTime = savedGame.RemainingTime,
+                BoardRows = savedGame.BoardRows,
+                BoardColumns = savedGame.BoardColumns,
+                IsLoading = true // Start with loading indicator active
+            };
+
+            // Create and show the game window first, while loading is in progress
+            var gameWindow = new GameWindow
+            {
+                DataContext = game,
+                Owner = parameter as Window
+            };
+            gameWindow.Show();
+
+            // Now load the card images asynchronously
+            await LoadSavedCardsAsync(game, savedGame);
+
+            // After loading is complete, check win condition and start game
+            var alreadyFlipped = game.Cards.Where(c => c.IsFlipped && !c.IsMatched).ToList();
+            if (alreadyFlipped.Count == 1)
+                game._firstSelectedCard = alreadyFlipped.First();
+            else
+                game._firstSelectedCard = null;
+
+            // Check if all cards are matched
+            if (game.Cards.All(c => c.IsMatched))
+            {
+                game.EndGame(true);
+            }
+            else
+            {
+                game.StartTimer();
+            }
+
+            // Loading finished
+            game.IsLoading = false;
+        }
+
+        // Helper method to load cards asynchronously
+        private async Task LoadSavedCardsAsync(Game game, GameSave savedGame)
+        {
+            await Task.Run(() =>
+            {
+                var loadedCards = new List<Card>();
+                foreach (var card in savedGame.Cards)
+                {
+                    if (!string.IsNullOrEmpty(card.ImagePath))
+                    {
+                        var bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.UriSource = new Uri(card.ImagePath, UriKind.Absolute);
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.EndInit();
+                        bitmap.Freeze();
+                        card.Image = bitmap;
+                    }
+                    loadedCards.Add(card);
+                }
+
+                // Update UI on the main thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    game.Cards.Clear();
+                    foreach (var card in loadedCards)
+                    {
+                        game.Cards.Add(card);
+                    }
+                });
+            });
+        }
+
+        private void OpenStatisticsWindow(object parameter)
+        {
+            var statisticsWindow = new StatisticsWindow
+            {
+                DataContext = new StatisticsViewModel(),
+                Owner = parameter as Window
+            };
+            statisticsWindow.ShowDialog();
+        }
 
         private void OpenOptionsWindow(object parameter)
         {
@@ -130,13 +236,17 @@ namespace MemoryGame.ViewModel
 
         private void ExitMenuWindow(object parameter)
         {
-            LoginWindow loginWindow = new LoginWindow();
-            loginWindow.Show();
+            var loginWindow = Application.Current.Properties["LoginWindow"] as Window;
+            if (loginWindow != null)
+            {
+                loginWindow.Show();
+            }
             if (parameter is Window window)
             {
                 window.Close();
             }
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\App.xaml
-9-617265358
-
-33990991223
+10-1478883753
+57-341973748
+40-2013778041
 1981839832580
-View\AboutWindow.xaml;View\CategoryWindow.xaml;View\GameWindow.xaml;View\LoginWindow.xaml;View\MainWindow.xaml;View\MenuWindow.xaml;View\NewUserWindow.xaml;View\OptionsWindow.xaml;View\TimeSettingWindow.xaml;
+View\AboutWindow.xaml;View\CategoryWindow.xaml;View\GameWindow.xaml;View\LoginWindow.xaml;View\MainWindow.xaml;View\MenuWindow.xaml;View\NewUserWindow.xaml;View\OptionsWindow.xaml;View\StatisticsWindow.xaml;View\TimeSettingWindow.xaml;
 
-False
+True
 

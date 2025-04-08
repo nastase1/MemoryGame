@@ -58,23 +58,37 @@
 
             <!-- Coloana stângă: ListBox-ul și butoanele pentru gestionarea utilizatorilor -->
             <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                <TextBlock Text="Alege un utilizator:" 
+                <TextBlock Text="Alege un utilizator:"
+                           FontSize="15"
                            FontWeight="Bold" 
                            Margin="0,0,0,5" 
-                           Foreground="White"/>
+                           Foreground="White">
+                    <TextBlock.Background>
+                        <ImageBrush Stretch="Fill"/>
+                    </TextBlock.Background>
+                </TextBlock>
                 <ListBox Name="UserListBox" Height="250" Margin="0,0,0,10"
                          ItemsSource="{Binding Users}"
-                         SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+                         SelectedItem="{Binding SelectedUser, Mode=TwoWay}" Foreground="White">
+                    <ListBox.BorderBrush>
+                        <ImageBrush/>
+                    </ListBox.BorderBrush>
+                    <ListBox.Background>
+                        <ImageBrush/>
+                    </ListBox.Background>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <!-- Afișăm doar numele în ListBox -->
-                                <TextBlock Text="{Binding FirstName}" />
-                                <TextBlock Text=" " />
-                                <TextBlock Text="{Binding LastName}" />
+                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                <!-- distanță între itemi -->
+                                <TextBlock Text="{Binding FirstName}" 
+                       FontSize="15" 
+                       Margin="0,0,5,0"/>
+                                <TextBlock Text="{Binding LastName}" 
+                       FontSize="15"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+
                 </ListBox>
                 <!-- Butoanele New User și Delete User, afișate orizontal -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
@@ -105,7 +119,7 @@
                     Margin="0,0,10,0"
                     Command="{Binding StartGameCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-            <Button Content="Exit" Width="150" Height="50" 
+            <Button Content="Close" Width="150" Height="50" 
                     Style="{StaticResource RoundedButtonStyle}"
                     Command="{Binding ExitCommand}"/>
         </StackPanel>

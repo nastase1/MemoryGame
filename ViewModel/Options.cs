@@ -76,12 +76,12 @@ namespace MemoryGame.ViewModel
             {
                 if (Rows < 2 || Rows > 6 || Columns < 2 || Columns > 6)
                 {
-                    MessageBox.Show("Dimensiunile trebuie să fie între 2 și 6.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("The board dimension should be between 2 and 6.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 if ((Rows * Columns) % 2 != 0)
                 {
-                    MessageBox.Show("Numărul de jetoane (Rows x Columns) trebuie să fie par.", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Card numbers(Rows x Columns) should be even.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
             }

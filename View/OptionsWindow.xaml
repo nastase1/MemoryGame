@@ -37,7 +37,7 @@
         </Style>
     </Window.Resources>
     <StackPanel Margin="10">
-        <TextBlock Text="Selectează tipul de tablă:" FontWeight="Bold" Margin="0,0,0,10" Foreground="White"/>
+        <TextBlock Text= "Select board type:" FontWeight="Bold" Margin="0,0,0,10" Foreground="White"/>
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
             <RadioButton Content="Standard (4x4)" 
                          IsChecked="{Binding SelectedBoardType, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Standard}" 

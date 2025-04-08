@@ -1,0 +1,20 @@
+[
+  {
+    "UserId": 1,
+    "UserName": "Nastase Teodor",
+    "GamesPlayed": 3,
+    "GamesWon": 2
+  },
+  {
+    "UserId": 2,
+    "UserName": "Ionescu Ion",
+    "GamesPlayed": 1,
+    "GamesWon": 0
+  },
+  {
+    "UserId": 3,
+    "UserName": "Numescu Prenumel",
+    "GamesPlayed": 1,
+    "GamesWon": 1
+  }
+]

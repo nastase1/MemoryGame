@@ -4,10 +4,10 @@
     "FirstName": "Nastase",
     "LastName": "Teodor",
     "ProfileImagePath": "file:///C:/Users/nasta/Downloads/first.png",
-    "BoardType": 0,
-    "BoardRows": 4,
-    "BoardColumns": 4,
-    "Category": 2
+    "BoardType": 1,
+    "BoardRows": 2,
+    "BoardColumns": 2,
+    "Category": 1
   },
   {
     "Id": 2,
@@ -17,16 +17,16 @@
     "BoardType": 1,
     "BoardRows": 4,
     "BoardColumns": 4,
-    "Category": 1
+    "Category": 0
   },
   {
     "Id": 3,
     "FirstName": "Numescu",
     "LastName": "Prenumel",
-    "ProfileImagePath": "file:///C:/Facultate/An 2/Semestrul 2/MAP/MemoryGame/MemoryGame/Images/Avatars/avatar4.png",
+    "ProfileImagePath": "file:///C:/Facultate/An 2/Semestrul 2/MAP/MemoryGame/MemoryGame/Images/Avatars/avatar7.png",
     "BoardType": 1,
-    "BoardRows": 6,
-    "BoardColumns": 6,
+    "BoardRows": 2,
+    "BoardColumns": 2,
     "Category": 0
   }
 ]

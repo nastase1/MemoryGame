@@ -23,6 +23,9 @@
     <Compile Update="View\OptionsWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\StatisticsWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\TimeSettingWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
