@@ -21,7 +21,6 @@ namespace MemoryGame.ViewModel
 
         public ICommand OkCommand { get; }
 
-        // Eveniment pentru a transmite durata ca TimeSpan
         public event Action<TimeSpan> TimeSet;
 
         public TimeSetting()

@@ -36,7 +36,6 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <!-- Butoane de Exit și Save în colțurile de sus -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -59,9 +58,7 @@
                     Margin="10" Width="80" Height="40"/>
         </Grid>
 
-        <!-- Conținutul principal al ferestrei -->
         <DockPanel Margin="0,50,0,0">
-            <!-- Timer-ul de joc -->
             <TextBlock Text="{Binding RemainingTime}"
                        FontSize="20"
                        FontWeight="Bold"
@@ -105,7 +102,6 @@
             </ItemsControl>
         </DockPanel>
 
-        <!-- Indicator de încărcare -->
         <Grid Background="#80000000"
               Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">

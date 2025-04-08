@@ -51,12 +51,15 @@ namespace MemoryGame.ViewModel
         {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+            dlg.InitialDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", "Avatars");
+
             if (dlg.ShowDialog() == true)
             {
                 BitmapImage image = new BitmapImage(new Uri(dlg.FileName));
                 UserImage = image;
             }
         }
+
 
         private bool CanSaveNewUser(object parameter)
         {

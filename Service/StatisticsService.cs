@@ -44,7 +44,6 @@ namespace MemoryGame.Service
             await SaveStatisticsAsync(stats);
         }
 
-        // Noua metodă pentru ștergerea statisticilor unui utilizator
         public static async Task RemoveStatisticsAsync(int userId)
         {
             var stats = await LoadStatisticsAsync();

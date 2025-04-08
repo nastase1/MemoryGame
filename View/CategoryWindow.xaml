@@ -12,7 +12,6 @@
     </Window.Background>
     <Window.Resources>
         <conv:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
-        <!-- Stil simplu pentru butoane similar cu cel din meniu -->
         <Style x:Key="RoundedButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#FF5A5A"/>
             <Setter Property="Foreground" Value="White"/>

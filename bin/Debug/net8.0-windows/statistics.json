@@ -2,19 +2,25 @@
   {
     "UserId": 1,
     "UserName": "Nastase Teodor",
-    "GamesPlayed": 3,
-    "GamesWon": 2
+    "GamesPlayed": 11,
+    "GamesWon": 11
   },
   {
     "UserId": 2,
     "UserName": "Ionescu Ion",
     "GamesPlayed": 1,
-    "GamesWon": 0
+    "GamesWon": 1
   },
   {
     "UserId": 3,
-    "UserName": "Numescu Prenumel",
+    "UserName": "Matei Andreea",
     "GamesPlayed": 1,
+    "GamesWon": 1
+  },
+  {
+    "UserId": 4,
+    "UserName": "Cucuvat Marlena",
+    "GamesPlayed": 2,
     "GamesWon": 1
   }
 ]

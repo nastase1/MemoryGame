@@ -12,7 +12,6 @@
         </RadialGradientBrush>
     </Window.Background>
     <Window.Resources>
-        <!-- Instanțe pentru convertoare -->
         <conv:EnumToBooleanConverter x:Key="EnumBooleanConverter"/>
         <conv:CustomVisibilityConverter x:Key="CustomVisibilityConverter"/>
         <Style x:Key="RoundedButtonStyle" TargetType="Button">
@@ -45,7 +44,6 @@
             <RadioButton Content="Custom" 
                          IsChecked="{Binding SelectedBoardType, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Custom}" Foreground="White"/>
         </StackPanel>
-        <!-- Secțiunea pentru introducerea valorilor custom -->
         <StackPanel Margin="10" Visibility="{Binding SelectedBoardType, Converter={StaticResource CustomVisibilityConverter}}">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                 <TextBlock Text="Rows:" Width="50" Foreground="White"/>

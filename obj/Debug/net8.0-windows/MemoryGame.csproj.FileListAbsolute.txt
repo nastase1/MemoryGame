@@ -95,3 +95,16 @@ C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows
 C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Cars\pexels-pixabay-248687.jpg
 C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Cars\pexels-viktorlundberg-754595.jpg
 C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\memory_backround.jpg
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar1.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar2.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar3.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar4.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar5.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar6.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar7.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar10.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar11.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar12.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar13.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar8.png
+C:\Facultate\An 2\Semestrul 2\MAP\MemoryGame\MemoryGame\bin\Debug\net8.0-windows\Images\Avatars\avatar9.png

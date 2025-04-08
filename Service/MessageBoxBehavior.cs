@@ -41,7 +41,6 @@ namespace MemoryGame.Service
                 System.Diagnostics.Debug.WriteLine("Closing window");
                 window.Close();
 
-                // Verificăm dacă există deja o fereastră de meniu stocată
                 if (Application.Current.Properties["MenuWindow"] is Window menuWindow)
                 {
                     System.Diagnostics.Debug.WriteLine("Showing stored menu window");
@@ -51,7 +50,6 @@ namespace MemoryGame.Service
                 else
                 {
                     System.Diagnostics.Debug.WriteLine("Creating new menu window");
-                    // Recuperăm utilizatorul curent pentru a seta DataContext-ul meniului
                     var currentUser = Application.Current.Properties["CurrentUser"] as User;
                     var newMenuWindow = new MenuWindow
                     {

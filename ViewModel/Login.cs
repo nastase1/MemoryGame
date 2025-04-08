@@ -73,7 +73,6 @@ namespace MemoryGame.ViewModel
         {
             if (SelectedUser != null)
             {
-                // Construiește calea completă către fișierul de salvare
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
                 string saveFolder = Path.Combine(baseDir, "Saves");
                 string gameFileName = Path.Combine(saveFolder, $"GameSave_{SelectedUser.Id}.json");
@@ -92,7 +91,6 @@ namespace MemoryGame.ViewModel
 
                 await StatisticsService.RemoveStatisticsAsync(SelectedUser.Id);
 
-                // Șterge utilizatorul și salvează modificările
                 Users.Remove(SelectedUser);
                 SaveUsers();
             }
@@ -164,7 +162,6 @@ namespace MemoryGame.ViewModel
         {
             try
             {
-                // Convertim colecția la listă pentru serializare
                 var json = JsonSerializer.Serialize(Users.ToList());
                 File.WriteAllText(UsersFile, json);
             }

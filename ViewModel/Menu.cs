@@ -70,7 +70,6 @@ namespace MemoryGame.ViewModel
             var timeSettingVM = new TimeSetting();
             TimeSpan selectedDuration = TimeSpan.Zero;
 
-            // Abonăm evenimentul pentru a primi durata selectată
             timeSettingVM.TimeSet += duration =>
             {
                 selectedDuration = duration;
@@ -82,16 +81,13 @@ namespace MemoryGame.ViewModel
                 Owner = parameter as Window
             };
 
-            // Afișează fereastra ca dialog
             timeSettingWindow.ShowDialog();
 
-            // Dacă utilizatorul nu a introdus o durată validă, putem seta o valoare implicită
             if (selectedDuration == TimeSpan.Zero)
             {
                 selectedDuration = TimeSpan.FromMinutes(3);
             }
 
-            // Creează GameViewModel-ul cu durata aleasă
             var gameViewModel = new Game(_user)
             {
                 RemainingTime = selectedDuration
@@ -114,7 +110,6 @@ namespace MemoryGame.ViewModel
         {
             if (parameter is Window menuWindow)
             {
-                // Salvează și ascunde fereastra de meniu
                 Application.Current.Properties["MenuWindow"] = menuWindow;
                 menuWindow.Hide();
             }
@@ -128,16 +123,14 @@ namespace MemoryGame.ViewModel
                 return;
             }
 
-            // Construiește view model-ul de joc din salvare
             var game = new Game(_user, true)
             {
                 RemainingTime = savedGame.RemainingTime,
                 BoardRows = savedGame.BoardRows,
                 BoardColumns = savedGame.BoardColumns,
-                IsLoading = true // Start with loading indicator active
+                IsLoading = true 
             };
 
-            // Create and show the game window first, while loading is in progress
             var gameWindow = new GameWindow
             {
                 DataContext = game,
@@ -145,17 +138,14 @@ namespace MemoryGame.ViewModel
             };
             gameWindow.Show();
 
-            // Now load the card images asynchronously
             await LoadSavedCardsAsync(game, savedGame);
 
-            // After loading is complete, check win condition and start game
             var alreadyFlipped = game.Cards.Where(c => c.IsFlipped && !c.IsMatched).ToList();
             if (alreadyFlipped.Count == 1)
                 game._firstSelectedCard = alreadyFlipped.First();
             else
                 game._firstSelectedCard = null;
 
-            // Check if all cards are matched
             if (game.Cards.All(c => c.IsMatched))
             {
                 game.EndGame(true);
@@ -165,11 +155,9 @@ namespace MemoryGame.ViewModel
                 game.StartTimer();
             }
 
-            // Loading finished
             game.IsLoading = false;
         }
 
-        // Helper method to load cards asynchronously
         private async Task LoadSavedCardsAsync(Game game, GameSave savedGame)
         {
             await Task.Run(() =>
@@ -190,7 +178,6 @@ namespace MemoryGame.ViewModel
                     loadedCards.Add(card);
                 }
 
-                // Update UI on the main thread
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     game.Cards.Clear();

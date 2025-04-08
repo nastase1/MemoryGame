@@ -78,7 +78,6 @@ namespace MemoryGame.ViewModel
         public Game(User user, bool isLoadedGame = false)
         {
             _user = user;
-            // Stocăm utilizatorul curent pentru navigare ulterioară
             Application.Current.Properties["CurrentUser"] = user;
 
             try
@@ -94,7 +93,6 @@ namespace MemoryGame.ViewModel
                 throw;
             }
 
-            // Setăm timpul de joc (aici 3 minute; poate fi modificat ulterior)
             if(!isLoadedGame)
                 RemainingTime = TimeSpan.FromMinutes(3);
 
@@ -106,8 +104,6 @@ namespace MemoryGame.ViewModel
             SaveGameCommand = new RelayCommand(async (param) => await SaveGame(param));
             
 
-            // Nu pornește timerul până când nu s-au încărcat cărțile
-            // Timerul se va porni după InitializeCardsAsync
         }
 
         public void StartTimer()
@@ -214,7 +210,6 @@ namespace MemoryGame.ViewModel
             }
         }
 
-        // Metodă pentru salvarea jocului curent
         public async Task SaveCurrentGameAsync(TimeSpan elapsedTime)
         {
             var gameSave = new GameSave
@@ -233,12 +228,10 @@ namespace MemoryGame.ViewModel
             await GameSaveService.SaveGameAsync(gameSave);
         }
 
-        // Comanda pentru Exit: închide fereastra de joc și redeschide fereastra de meniu
         private void ExitGame(object parameter)
         {
             if (parameter is Window gameWindow)
             {
-                // Recuperează fereastra de meniu stocată
                 var menuWindow = Application.Current.Properties["MenuWindow"] as Window;
                 if (menuWindow == null)
                 {
@@ -255,12 +248,10 @@ namespace MemoryGame.ViewModel
         }
 
 
-        // Comanda pentru Save: salvează jocul și apoi comportă-se ca Exit
         private async Task SaveGame(object parameter)
         {
             try
             {
-                // Folosim TimeSpan.Zero ca exemplu; poți calcula timpul scurs dacă dorești.
                 await SaveCurrentGameAsync(TimeSpan.Zero);
             }
             catch (Exception ex)

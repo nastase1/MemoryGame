@@ -11,9 +11,7 @@
         </RadialGradientBrush>
     </Window.Background>
     <Window.Resources>
-        <!-- ViewModel instanțiat din resurse -->
         <local:Login x:Key="loginVM" />
-        <!-- Stilul butoanelor, similar cu cel din MainWindow -->
         <Style x:Key="RoundedButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#FF5A5A"/>
             <Setter Property="Foreground" Value="White"/>
@@ -33,7 +31,6 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <!-- Seagă DataContext-ul din resurse -->
     <Grid Margin="10" DataContext="{StaticResource loginVM}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -41,7 +38,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Titlul -->
         <TextBlock Text="Welcome! Enjoy this game!"
                    FontSize="22" 
                    FontWeight="Bold"
@@ -49,14 +45,12 @@
                    Margin="0,0,0,10"
                    Foreground="White"/>
 
-        <!-- Zona centrală: ListBox-ul de utilizatori și imaginea utilizatorului selectat -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Coloana stângă: ListBox-ul și butoanele pentru gestionarea utilizatorilor -->
             <StackPanel Grid.Column="0" Margin="0,0,10,0">
                 <TextBlock Text="Alege un utilizator:"
                            FontSize="15"
@@ -79,7 +73,6 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Margin="0,5">
-                                <!-- distanță între itemi -->
                                 <TextBlock Text="{Binding FirstName}" 
                        FontSize="15" 
                        Margin="0,0,5,0"/>
@@ -90,7 +83,6 @@
                     </ListBox.ItemTemplate>
 
                 </ListBox>
-                <!-- Butoanele New User și Delete User, afișate orizontal -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Button Content="New User"
                             Margin="20,0,20,0"
@@ -106,13 +98,11 @@
                 </StackPanel>
             </StackPanel>
 
-            <!-- Coloana dreaptă: Imaginea utilizatorului selectat -->
             <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Image Stretch="Uniform"
                        Source="{Binding SelectedUser.ProfileImage}" Grid.Column="1" Margin="13,8,2,157" />
         </Grid>
 
-        <!-- Zona de jos: Butoane de Play și Cancel -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
             <Button Content="Play" Width="150" Height="50" 
                     Style="{StaticResource RoundedButtonStyle}" 

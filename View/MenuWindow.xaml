@@ -15,7 +15,6 @@
     </Window.Background>
     <Window.Resources>
         <local:Menu x:Key="menuVM"/>
-        <!-- Stilul butoanelor, similar cu cel din MainWindow -->
         <Style x:Key="RoundedButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#FF5A5A"/>
             <Setter Property="Foreground" Value="White"/>
@@ -39,13 +38,10 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <!-- Rând pentru header -->
             <RowDefinition Height="Auto"/>
-            <!-- Rând pentru butoane -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header: Afișează "Hello <FirstName> <LastName>" -->
         <TextBlock Grid.Row="0"
                    HorizontalAlignment="Center"
                    FontSize="24"
@@ -60,7 +56,6 @@
             </TextBlock.Text>
         </TextBlock>
 
-        <!-- StackPanel cu butoanele de meniu -->
         <StackPanel Grid.Row="1"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
